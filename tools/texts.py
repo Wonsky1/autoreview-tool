@@ -1,12 +1,29 @@
 from typing import List
 
 
-def split_string_by_length(s: str, length: int) -> List[str]:
+def split_large_file(file_content: str, chunk_size: int) -> List[str]:
     """
-    Split a string into chunks of a specified length.
+    Split a large file content into smaller chunks based on a specified chunk size.
 
-    :param s: The input string to be split.
-    :param length: The maximum length of each chunk.
-    :return: A list of string chunks, each with a maximum length of 'length'.
+    :param file_content: The content of the file as a single string.
+    :param chunk_size: The maximum size (in characters) of each chunk. Defaults to 2048.
+    :return: A list of file content chunks, where each chunk is a string of at most 'chunk_size' characters.
     """
-    return [s[i:i + length] for i in range(0, len(s), length)]
+    lines = file_content.split("\n")
+    chunks = []
+    current_chunk = []
+    current_size = 0
+
+    for line in lines:
+        line_size = len(line)
+        if current_size + line_size > chunk_size:
+            chunks.append("\n".join(current_chunk))
+            current_chunk = []
+            current_size = 0
+        current_chunk.append(line)
+        current_size += line_size
+
+    if current_chunk:
+        chunks.append("\n".join(current_chunk))
+
+    return chunks
