@@ -1,4 +1,5 @@
 from typing import List
+from urllib.parse import urlparse
 
 
 def split_large_file(file_content: str, chunk_size: int) -> List[str]:
@@ -27,3 +28,23 @@ def split_large_file(file_content: str, chunk_size: int) -> List[str]:
         chunks.append("\n".join(current_chunk))
 
     return chunks
+
+
+def clear_github_url(url: str) -> str:
+    """
+    Extracts the repository path from a full GitHub URL.
+
+    Args:
+        url (str): The full GitHub repository URL.
+
+    Returns:
+        str: The simplified repository path (username/repository).
+    """
+    try:
+        parsed_url = urlparse(url)
+        if parsed_url.netloc == "github.com":
+            return parsed_url.path.lstrip("/")
+        else:
+            raise ValueError("The provided URL is not a valid GitHub repository URL.")
+    except Exception as e:
+        raise ValueError(f"Error processing the URL: {e}")
