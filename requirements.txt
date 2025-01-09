@@ -1,13 +1,13 @@
 PyGithub==2.5.0
-fastapi==0.115.6
 redis==5.2.1
 openai
 langchain-openai
-python-dotenv==1.0.1 # delete maybe
-langchain-ollama==0.2.2 # remove if openai only
+langchain-ollama==0.2.2
 pydantic-settings==2.7.1
 langchain==0.3.14
 langchain-community==0.3.14
+# Backend related
+fastapi==0.115.6
 uvicorn
 # tests related
 pytest

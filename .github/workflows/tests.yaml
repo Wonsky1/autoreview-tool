@@ -25,5 +25,5 @@ jobs:
           pytest tests -v
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets._GITHUB_ACCESS_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ENABLE_REDIS: False
+          LOCAL_DEVELOPMENT: True
