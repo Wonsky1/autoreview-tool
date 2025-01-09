@@ -23,7 +23,7 @@
    ```bash
    python -m venv .venv
    source .venv/bin/activate   # On Windows use `.venv\Scripts\activate`
-   pip install -r requirements.txt
+   pip install -r requirements.txt # for poetry use `poetry install`
    ```
 
 3. **Set Up Environment Variables:**
@@ -149,4 +149,8 @@ We can leverage **AWS Lambda** or **Kubernetes** cloud services to enable auto-s
    - Set up billing: https://platform.openai.com/settings/organization/billing/overview
 2. **How do I get my Github token?**
    - Create token here: https://github.com/settings/tokens
-
+3. **How do I setup local Llama3?**
+   - Visit [Ollama's official website](https://ollama.com/) to download and install Ollama on your system.
+   - Open your terminal and type the following command to check if Ollama is installed successfully: `ollama`.
+   - Pull the Llama3 model `ollama pull llama3`
+   - Run the Llama3 model `ollama run llama3`
