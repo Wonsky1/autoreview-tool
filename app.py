@@ -13,7 +13,7 @@ app = FastAPI()
 
 
 @app.post("/review")
-async def analyze_repository(request: RepositoryRequest):
+async def review_repository(request: RepositoryRequest):
     try:
         repo_name = clear_github_url(str(request.github_repo_url))
         repo = settings.github_client.get_repo(repo_name)
