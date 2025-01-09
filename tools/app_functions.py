@@ -25,10 +25,11 @@ def send_files_to_model(
         file_summary = process_file(
             file_chunks, file_path, candidate_level, assignment_description
         )
-        # TODO: make test with this
         if not file_summary:
             continue
         verdicts.append(f"File: {file_path}\n{file_summary}")
+    if not verdicts:
+        raise Exception("There was an error processing the repository files.")
     prompt = review_repository_files_prompt(
         file_summaries="".join(verdicts),
         candidate_level=candidate_level,
