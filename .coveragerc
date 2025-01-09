@@ -13,6 +13,7 @@ omit =
     .*/
     */.*/**
     */core/config.py
+    */schemas/endpoints.py
 
 branch = True
 
