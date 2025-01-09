@@ -5,12 +5,18 @@ def review_repository_files_prompt(file_summaries: str, candidate_level: str, as
     **Assignment Description**:
     {assignment_description}
 
-    1. **Found Files**: List the files that were analyzed and any key observations about the structure of the repository.
+    Consider the candidate's level—whether Junior, Middle, or Senior—throughout your review. For example:
+    - **Junior**: Expect more basic understanding, limited use of design patterns, and simpler solutions.
+    - **Middle**: Expect well-structured code, appropriate error handling, and some use of advanced concepts.
+    - **Senior**: Expect efficient, highly maintainable, and scalable code with advanced design patterns, best practices, and optimizations.
+
+    1. **Analyzed files**: List the files that were analyzed and any key observations about the structure of the repository.
     2. **Downsides/comments**: Provide constructive feedback on the code, pointing out any issues, mistakes, or areas for improvement. Consider:
        - Code readability and organization.
        - Potential issues in code efficiency, security, or maintainability.
        - Incomplete or missing comments and documentation.
        - Whether the code follows best practices (e.g., naming conventions, design patterns).
+       - **Candidate Level**: Consider how well the code aligns with the candidate's experience level. Are there signs that the candidate is still developing their skills (Junior)? Is the code mature and well-structured (Middle)? Is the code highly optimized, following best practices, and demonstrating advanced problem-solving (Senior)?
     3. **Rating**: Give an overall rating based on the candidate's level (Junior, Middle, Senior). Rate from 1/5 (worst) to 5/5 (best), with a brief explanation of the rating based on the quality of the code and your findings.
     4. **Conclusion**: Summarize the strengths and weaknesses of the repository and provide a final recommendation, considering the candidate's level.
 
@@ -22,11 +28,11 @@ def review_repository_files_prompt(file_summaries: str, candidate_level: str, as
     ---
 
     **Instructions for the AI**:
-    - Ensure that the **Found files** section clearly lists each file analyzed.
-    - Provide clear **downsides/comments** for each file, focusing on the issues and missing areas. If the file is empty, skip it, but make sure to mention it in Found Files.
+    - Ensure that the **Analyzed files** section clearly lists each file analyzed.
+    - Provide clear **downsides/comments** for each file, focusing on the issues and missing areas. If the file is empty, skip it.
     - **Rating** should be based on a realistic evaluation of the code, considering the candidate's experience level. Rate from 1/5 to 5/5 and explain why.
     - In the **Conclusion**, provide a balanced final recommendation, detailing what the candidate did well and what could be improved.
-    - Ensure that you follow the structure: Found files, Downsides/comments, Rating, Conclusion.
+    - Ensure that you follow the structure: Analyzed files, Downsides/comments, Rating, Conclusion.
     """
 
 
@@ -43,6 +49,14 @@ def review_single_file_prompt(
 
     **Assignment Description**:
     {assignment_description}
+
+    **Candidate Level**:
+    {candidate_level}
+
+    Consider the candidate’s experience level when reviewing the code:
+    - **Junior**: The code might be simpler, with some room for improvement in organization, error handling, and documentation.
+    - **Middle**: Expect a balance of solid code structure, efficiency, and best practices.
+    - **Senior**: The code should be optimized, well-structured, and demonstrate advanced problem-solving skills.
 
     Your goal is to provide a detailed review based on the content, focusing on the following structure:
 
@@ -77,6 +91,14 @@ def review_single_file_summary_prompt(file_path: str, candidate_level: str, assi
 
     **Assignment Description**:
     {assignment_description}
+
+    **Candidate Level**:
+    {candidate_level}
+
+    Considering the candidate’s level:
+    - **Junior**: The candidate’s code should meet basic requirements, but may lack advanced design patterns or optimizations.
+    - **Middle**: Expect solid code, with room for further optimization and improvements in structure.
+    - **Senior**: The candidate’s code should demonstrate advanced problem-solving, optimal design, and efficient solutions.
 
     1. **Overall Evaluation**: Summarize the quality of the code, highlighting its strengths and weaknesses. Focus on areas such as readability, structure, efficiency, and adherence to best practices.
     2. **Candidate Level**: Considering the candidate's level (Junior, Middle, Senior), assess whether the code aligns with expectations for that level. Provide a rating from 1/5 to 5/5 based on their performance.
