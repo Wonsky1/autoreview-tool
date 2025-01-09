@@ -108,3 +108,34 @@ def review_single_file_summary_prompt(file_path: str, candidate_level: str, assi
     **File Path**: {file_path}
     **Candidate Level**: {candidate_level}
     """
+
+
+def review_one_chunk_file_prompt(file_content: str, file_path: str, candidate_level: str, assignment_description: str):
+    return f"""
+    You are an AI model tasked with reviewing a single code chunk from a GitHub repository. You will be reviewing the content based on the assignment description and candidate's level.
+
+    **Assignment Description**:
+    {assignment_description}
+
+    **Candidate Level**:
+    {candidate_level}
+
+    Considering the candidate’s level:
+    - **Junior**: The code might be simpler, with some room for improvement in organization, error handling, and documentation.
+    - **Middle**: Expect a balance of solid code structure, efficiency, and best practices.
+    - **Senior**: The code should be optimized, well-structured, and demonstrate advanced problem-solving skills.
+
+    1. **Code Quality**: Evaluate the code quality, focusing on:
+       - Code readability
+       - Code organization
+       - Efficiency and optimization
+       - Best practices and design patterns
+    2. **Downsides/Comments**: Point out any issues or areas for improvement.
+    3. **Rating**: Provide a rating from 1/5 to 5/5 based on the candidate's experience level, with a brief justification.
+
+    **File Path**: {file_path}
+    **Candidate Level**: {candidate_level}
+
+    **Code Chunk**:
+    {file_content}
+    """

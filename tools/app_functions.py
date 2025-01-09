@@ -36,5 +36,5 @@ def send_files_to_model(
         assignment_description=assignment_description,
     )
     overall_response = settings.GENERATIVE_MODEL.predict(prompt)
-
-    return overall_response
+    files = ", ".join(file_paths)
+    return f"Files found: {files}\n{overall_response}"
