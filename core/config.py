@@ -1,13 +1,20 @@
+import logging
 from logging import getLogger
 
 from github import Github, Auth
 from pydantic_settings import BaseSettings
 from pydantic import field_validator, ValidationInfo
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain_ollama import ChatOllama
 from typing import Optional
 
 logger = getLogger(__name__)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
 
 
 class Settings(BaseSettings):
@@ -21,7 +28,7 @@ class Settings(BaseSettings):
 
     github_client: Optional[Github] = None
 
-    @field_validator("GENERATIVE_MODEL", mode="before")
+    @field_validator("GENERATIVE_MODEL")
     def validate_generative_model(
         cls, value: Optional[ChatOpenAI | ChatOllama], info: ValidationInfo
     ):

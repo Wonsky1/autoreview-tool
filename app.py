@@ -1,8 +1,13 @@
+from logging import getLogger
+
 from fastapi import FastAPI, HTTPException
 from core.config import settings
 from schemas.endpoints import RepositoryRequest
 from tools.app_functions import send_files_to_model
 from tools.texts import clear_github_url
+
+
+logger = getLogger(__name__)
 
 app = FastAPI()
 
