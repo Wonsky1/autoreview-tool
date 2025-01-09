@@ -18,6 +18,7 @@ logging.basicConfig(
 
 
 class Settings(BaseSettings):
+    ENABLE_REDIS: bool = True
     REDIS_HOST: str = "localhost"
     REDIS_PORT: int = 6379
     REDIS_DB: int = 0
