@@ -5,6 +5,7 @@ from langchain.memory import ConversationBufferMemory
 from logging import getLogger
 from core.config import settings
 from prompts import review_single_file_prompt, review_single_file_summary_prompt
+from tools.redis_client import get_redis_client
 
 logger = getLogger(__name__)
 
@@ -58,12 +59,22 @@ def get_all_repository_paths(repo: Repository, path: str = "") -> List[str]:
     :param path: The path within the repository to start from (default is root).
     :return: A list of all file paths in the repository.
     """
+    redis_client = get_redis_client()
+    cache_key = f"repo_paths:{repo.full_name}"
+
+    cached_paths = redis_client.get(cache_key)
+    if cached_paths:
+        logger.info(f"Using cached paths for repository: {repo.full_name}")
+        return eval(cached_paths)
+
     paths = []
     contents = repo.get_contents(path)
-
     for content in contents:
         if content.type == "dir":
             paths.extend(get_all_repository_paths(repo, content.path))
         else:
             paths.append(content.path)
+
+    redis_client.set(cache_key, str(paths), ex=settings.CACHE_EXPIRATION_MINUTES * 60)
+
     return paths

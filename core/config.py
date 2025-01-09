@@ -18,6 +18,11 @@ logging.basicConfig(
 
 
 class Settings(BaseSettings):
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
+
+    CACHE_EXPIRATION_MINUTES: int = 60
 
     GITHUB_ACCESS_TOKEN: str
     LLM_API_CHAR_LIMIT: int = 2028
