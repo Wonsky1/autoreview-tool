@@ -10,6 +10,8 @@ def split_large_file(file_content: str, chunk_size: int) -> List[str]:
     :param chunk_size: The maximum size (in characters) of each chunk. Defaults to 2048.
     :return: A list of file content chunks, where each chunk is a string of at most 'chunk_size' characters.
     """
+    if not file_content:
+        return []
     lines = file_content.split("\n")
     chunks = []
     current_chunk = []
@@ -33,6 +35,7 @@ def split_large_file(file_content: str, chunk_size: int) -> List[str]:
 def clear_github_url(url: str) -> str:
     """
     Extracts the repository path from a full GitHub URL.
+    If the URL does not have a protocol, it assumes "https://" by default.
 
     Args:
         url (str): The full GitHub repository URL.
@@ -41,7 +44,14 @@ def clear_github_url(url: str) -> str:
         str: The simplified repository path (username/repository).
     """
     try:
+        # If the URL does not have a protocol, add "https://"
+        if not url.startswith("http"):
+            url = "https://" + url
+
+        # Parse the URL
         parsed_url = urlparse(url)
+
+        # Check if the netloc is github.com
         if parsed_url.netloc == "github.com":
             return parsed_url.path.lstrip("/")
         else:

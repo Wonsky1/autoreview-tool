@@ -25,6 +25,9 @@ def send_files_to_model(
         file_summary = process_file(
             file_chunks, file_path, candidate_level, assignment_description
         )
+        # TODO: make test with this
+        if not file_summary:
+            continue
         verdicts.append(f"File: {file_path}\n{file_summary}")
     prompt = review_repository_files_prompt(
         file_summaries="".join(verdicts),

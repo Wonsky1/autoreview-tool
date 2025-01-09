@@ -14,13 +14,14 @@ def process_file(
     file_path: str,
     candidate_level: str,
     assignment_description: str,
-) -> str:
+) -> str | None:
     memory = ConversationBufferMemory()
     conversation_chain = ConversationChain(
         llm=settings.GENERATIVE_MODEL,
         memory=memory,
     )
-
+    if not file_chunks:
+        return None
     for i, chunk in enumerate(file_chunks):
         logger.info(f"Processing file: {file_path} - Chunk {i + 1}/{len(file_chunks)}")
         conversation_chain.invoke(
