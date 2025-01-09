@@ -1,14 +1,14 @@
 PyGithub==2.5.0
 redis==5.2.1
-openai
-langchain-openai
+openai==1.59.5
+langchain-openai==0.2.14
 langchain-ollama==0.2.2
 pydantic-settings==2.7.1
 langchain==0.3.14
 langchain-community==0.3.14
 # Backend related
 fastapi==0.115.6
-uvicorn
+uvicorn==0.34.0
 # tests related
-pytest
-pytest-mock
+pytest==8.3.4
+pytest-mock==3.14.0
