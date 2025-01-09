@@ -1,0 +1,22 @@
+[run]
+include = 
+    app.py
+    prompts/*
+    tools/*
+    schemas/*
+    
+
+omit =
+    */tests/*
+    */test_*.py
+    */__init__.py
+    .*/
+    */.*/**
+    */core/config.py
+
+branch = True
+
+[report]
+fail_under = 70
+
+show_missing = True
