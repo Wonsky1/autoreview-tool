@@ -15,7 +15,8 @@ class TestSendFilesToModel(unittest.TestCase):
     @patch('tools.app_functions.get_all_repository_paths')
     def test_send_files_to_model(self, mock_get_all_repository_paths, mock_repository, mock_split_large_file,
                                  mock_process_file, mock_prompt, mock_GENERATIVE_MODEL, mock_settings, mock_predict):
-        mock_get_all_repository_paths.return_value = ['path1', 'path2']
+        file_paths = ['path1', 'path2']
+        mock_get_all_repository_paths.return_value = file_paths
         mock_split_large_file.return_value = ['chunk1', 'chunk2']
         mock_process_file.return_value = 'summary'
 
@@ -23,7 +24,8 @@ class TestSendFilesToModel(unittest.TestCase):
         mock_predict.return_value = expected_result
 
         result = send_files_to_model(mock_repository, 'level', 'description')
-
+        files_found = ", ".join(file_paths)
+        expected_result = f"Files found: {files_found}\n{expected_result}"
         self.assertEqual(result, expected_result)
 
         mock_predict.assert_called_once()
