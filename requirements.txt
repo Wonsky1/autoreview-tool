@@ -1,3 +1,6 @@
 PyGithub==2.5.0
 fastapi==0.115.6
 python-dotenv==1.0.1 # delete maybe
+openai==1.59.5
+langchain-ollama==0.2.2 # remove if openai only
+pydantic-settings==2.7.1
