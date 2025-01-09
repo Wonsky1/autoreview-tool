@@ -84,10 +84,11 @@ class Settings(BaseSettings):
         auth = Auth.Token(github_access_token)
         return Github(auth=auth)
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = True
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": True,
+    }
 
 
 settings = Settings()
