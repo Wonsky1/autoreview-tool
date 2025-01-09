@@ -8,7 +8,9 @@ from core.config import settings
 logger = getLogger(__name__)
 
 
-def send_files_to_model(repo: Repository, candidate_level: str) -> str:
+def send_files_to_model(
+    repo: Repository, candidate_level: str, assignment_description: str
+) -> str:
     """
     Process all repository files and send them to the generative model for analysis.
     Clears conversation history for each file and provides an overall summary.
@@ -20,10 +22,14 @@ def send_files_to_model(repo: Repository, candidate_level: str) -> str:
         file_content = repo.get_contents(file_path).decoded_content.decode()
         file_chunks = split_large_file(file_content, settings.LLM_API_CHAR_LIMIT)
 
-        file_summary = process_file(file_chunks, file_path, candidate_level)
+        file_summary = process_file(
+            file_chunks, file_path, candidate_level, assignment_description
+        )
         verdicts.append(f"File: {file_path}\n{file_summary}")
     prompt = review_repository_files_prompt(
-        file_summaries="".join(verdicts), candidate_level=candidate_level
+        file_summaries="".join(verdicts),
+        candidate_level=candidate_level,
+        assignment_description=assignment_description,
     )
     overall_response = settings.GENERATIVE_MODEL.predict(prompt)
 

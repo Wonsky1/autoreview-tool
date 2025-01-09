@@ -9,7 +9,12 @@ from prompts import review_single_file_prompt, review_single_file_summary_prompt
 logger = getLogger(__name__)
 
 
-def process_file(file_chunks: List[str], file_path: str, candidate_level: str) -> str:
+def process_file(
+    file_chunks: List[str],
+    file_path: str,
+    candidate_level: str,
+    assignment_description: str,
+) -> str:
     memory = ConversationBufferMemory()
     conversation_chain = ConversationChain(
         llm=settings.GENERATIVE_MODEL,
@@ -26,6 +31,7 @@ def process_file(file_chunks: List[str], file_path: str, candidate_level: str) -
                     candidate_level=candidate_level,
                     chunk_num=i,
                     total_chunk_num=len(file_chunks),
+                    assignment_description=assignment_description,
                 )
             }
         )
@@ -33,7 +39,9 @@ def process_file(file_chunks: List[str], file_path: str, candidate_level: str) -
     file_summary = conversation_chain.invoke(
         {
             "input": review_single_file_summary_prompt(
-                file_path=file_path, candidate_level=candidate_level
+                file_path=file_path,
+                candidate_level=candidate_level,
+                assignment_description=assignment_description,
             )
         }
     )

@@ -11,9 +11,12 @@ app = FastAPI()
 async def analyze_repository(request: RepositoryRequest):
     try:
         repo_name = clear_github_url(str(request.github_repo_url))
-        print(settings.GENERATIVE_MODEL)
         repo = settings.github_client.get_repo(repo_name)
-        result = send_files_to_model(repo, request.candidate_level)
+        result = send_files_to_model(
+            repo=repo,
+            candidate_level=request.candidate_level,
+            assignment_description=request.assignment_description,
+        )
         return {"review": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
