@@ -114,7 +114,7 @@ pytest -v
     ```
 
 **Coverage report:**
-![coverage report img](https://i.imgur.com/f0ypy4F.png)
+![coverage report img](https://i.imgur.com/lk7XatD.png)
 
 ## Documentation:
 

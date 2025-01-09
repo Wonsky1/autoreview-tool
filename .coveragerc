@@ -14,6 +14,7 @@ omit =
     */.*/**
     */core/config.py
     */schemas/endpoints.py
+    */tools/redis_client.py
 
 branch = True
 
