@@ -12,8 +12,24 @@ def send_files_to_model(
     repo: Repository, candidate_level: str, assignment_description: str
 ) -> str:
     """
-    Process all repository files and send them to the generative model for analysis.
-    Clears conversation history for each file and provides an overall summary.
+    Processes all repository files and sends them to the generative model for analysis.
+    Clears conversation history for each file and provides an overall summary of the repository.
+
+    This function retrieves all files from a GitHub repository, splits large files into chunks,
+    and sends the chunks to the generative model for analysis. It processes each file individually,
+    appending the results to generate a comprehensive review. If no files are successfully processed,
+    an exception is raised.
+
+    Args:
+        repo (Repository): The GitHub repository object containing the files to be reviewed.
+        candidate_level (str): The level of the candidate (e.g., Junior, Middle, Senior) for the review.
+        assignment_description (str): A description of the coding assignment to contextualize the review.
+
+    Returns:
+        str: A summary of the review for the repository, including a list of processed files and the overall model response.
+
+    Raises:
+        Exception: If no files are successfully processed or if there is an issue with the repository files.
     """
     file_paths = get_all_repository_paths(repo)
     verdicts = []

@@ -4,11 +4,14 @@ from urllib.parse import urlparse
 
 def split_large_file(file_content: str, chunk_size: int) -> List[str]:
     """
-    Split a large file content into smaller chunks based on a specified chunk size.
+    Splits a large file content into smaller chunks based on the specified chunk size.
 
-    :param file_content: The content of the file as a single string.
-    :param chunk_size: The maximum size (in characters) of each chunk. Defaults to 2048.
-    :return: A list of file content chunks, where each chunk is a string of at most 'chunk_size' characters.
+    Args:
+        file_content (str): The content of the file as a single string.
+        chunk_size (int): The maximum size (in characters) of each chunk.
+
+    Returns:
+        List[str]: A list of file content chunks, where each chunk is a string of at most `chunk_size` characters.
     """
     if not file_content:
         return []
