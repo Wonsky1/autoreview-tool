@@ -7,4 +7,6 @@ pydantic==1.8.2
 langchain==0.3.14
 langchain-community==0.3.14
 uvicorn
-
+# tests related
+pytest
+pytest-mock
