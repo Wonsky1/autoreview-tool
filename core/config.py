@@ -1,9 +1,9 @@
 from logging import getLogger
 from pydantic_settings import BaseSettings
 from pydantic import field_validator, ValidationInfo
-from openai import OpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain_ollama import ChatOllama
-from typing import Optional
+from typing import Optional, Union
 
 logger = getLogger(__name__)
 
@@ -15,82 +15,38 @@ class Settings(BaseSettings):
     OPENAI_MODEL_NAME: str = "gpt-4-turbo"
     LOCAL_DEVELOPMENT: bool = False
     OPENAI_API_KEY: Optional[str] = None
-    
-    client: Optional[OpenAI] = None  
+    GENERATIVE_MODEL: Optional[ChatOllama | ChatOpenAI] = None
 
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = True
 
-    @field_validator("client", mode="before")
-    def validate_openai_client(cls, value: Optional[OpenAI], info: ValidationInfo):
+    @field_validator("GENERATIVE_MODEL", mode="before")
+    def validate_generative_model(cls, value: Optional[ChatOpenAI | ChatOllama], info: ValidationInfo):
         """
-        Validates and initializes the OpenAI client if LOCAL_DEVELOPMENT is False.
-        
+        Validates and initializes the appropriate generative model based on LOCAL_DEVELOPMENT.
+
         Args:
-            value: The current value of the client field.
-            info: Additional validation information, including other field values.
-        
+            value: The current value of the GENERATIVE_MODEL field.
+            info: Validation information containing other field values.
+
         Returns:
-            The validated or initialized OpenAI client.
-        
+            The appropriate generative model (ChatOpenAI or ChatOllama).
+
         Raises:
             ValueError: If OPENAI_API_KEY is missing when LOCAL_DEVELOPMENT is False.
         """
-        if not info.data.get("LOCAL_DEVELOPMENT", False):
-            if value is None:
-                openai_api_key = info.data.get("OPENAI_API_KEY")
-                if not openai_api_key:
-                    raise ValueError("OPENAI_API_KEY must be provided when LOCAL_DEVELOPMENT is False.")
-                value = OpenAI(api_key=openai_api_key)
-        return value
+        if info.data.get("LOCAL_DEVELOPMENT", False):
+            logger.info("Using local development model: Llama3")
+            return ChatOllama(model="llama3")
+
+        openai_api_key = info.data.get("OPENAI_API_KEY")
+        if not openai_api_key:
+            raise ValueError("OPENAI_API_KEY must be provided when LOCAL_DEVELOPMENT is False.")
+
+        logger.info("Using remote model: OpenAI GPT")
+        return ChatOpenAI(model=info.data.get("OPENAI_MODEL_NAME", "gpt-4-turbo"), openai_api_key=openai_api_key)
 
 
 settings = Settings()
-
-
-def generate_response(system: str, human: str):
-    """
-    Generates a response based on the input text and the LOCAL_DEVELOPMENT setting.
-    
-    If LOCAL_DEVELOPMENT is True, uses the local Llama3 model. 
-    If LOCAL_DEVELOPMENT is False, uses the OpenAI API.
-    
-    Args:
-        system: The system message for the model.
-        human: The input text for which the response is to be generated.
-    
-    Returns:
-        A string containing the generated response from either the local model or the OpenAI API.
-    """
-    if settings.LOCAL_DEVELOPMENT:
-        messages = [
-            ("system", system),
-            ("human", human)
-        ]
-        try:
-            llm = ChatOllama(model="llama3")
-            response = llm.invoke(messages)
-            return response.content
-        except Exception as e:
-            logger.error(f"Error generating response with Llama3: {e}")
-            raise ValueError("Error generating response with Llama3.")
-    
-    else:
-        if settings.client:
-            try:
-                chat_completion = settings.client.chat.completions.create(
-                    messages=[
-                        {"role": "system", "content": system},
-                        {"role": "user", "content": human}
-                    ],
-                    model=settings.OPENAI_MODEL_NAME
-                )
-                return chat_completion['choices'][0]['message']['content']
-            except Exception as e:
-                logger.error(f"Error calling OpenAI API: {e}")
-                raise ValueError("Error generating response with GPT-4.")
-        else:
-            logger.error(f"OpenAI client is not properly initialized.")
-            raise ValueError("OpenAI client is not properly initialized.")
